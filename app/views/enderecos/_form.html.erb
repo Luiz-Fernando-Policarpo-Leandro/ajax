@@ -1,0 +1,54 @@
+<%= form_with(model: endereco) do |form| %>
+  <% if endereco.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(endereco.errors.count, "error") %> prohibited this endereco from being saved:</h2>
+
+      <ul>
+        <% endereco.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div class="form-group cascata">   
+    <%= form.label :estado_id, class: "colsm-2 control-label" %>
+    <%= form.select :estado_id , Estado.all.collect { |estado| [estado.nome, estado.id] } , :selected => @endereco.estado_id, :include_blank => true %>
+  </div>
+
+  <div class="form-group cascata-cidades" >
+  <%
+  cidades = []
+    if @endereco.estado_id.present?
+       cidades = Cidade.where(estado_id: endereco.estado_id).collect { |cidade| [cidade.nome, cidade.id] }
+    end
+  %>
+  <br>
+    <%= form.label :cidade_id, style: "colsm-2 control-label" %>
+    <%= form.select :cidade_id, cidades , :selected => @endereco.estado_id%>
+  </div>
+
+  <div>
+    <%= form.label :endereco, style: "display: block" %>
+    <%= form.text_field :endereco %>
+  </div>
+
+  <div>
+    <%= form.label :bairro, style: "display: block" %>
+    <%= form.text_field :bairro %>
+  </div>
+
+  <div>
+    <%= form.label :cep, style: "display: block" %>
+    <%= form.text_field :cep %>
+  </div>
+
+  <div>
+    <%= form.label :numero, style: "display: block" %>
+    <%= form.number_field :numero %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
